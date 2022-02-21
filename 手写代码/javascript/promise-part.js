@@ -1,0 +1,225 @@
+
+/**
+ * promise.all
+ */
+
+function PromiseAll(promises) {
+	return new Promise((resolve, reject) => {
+		if(!Array.isArray(promises)) {
+			throw new TypeError("promises must be an array")
+		}
+
+		let result = []
+		let count = 0
+		const proLen = promises.length
+
+		promise.forEach((promise, index) => {
+			promise.then(res => {
+				result[index] = res
+				count++
+				count === proLen && resolve(result)
+			}, err => {
+				reject(err)
+			})
+		})
+	})
+}
+
+
+/**
+ * promose.finally
+ */
+
+Promise.prototype.finally = function (cb) {
+	return this.then(function (value) {
+		return Promise.resolve(cb()).then(function(){
+			return value
+		})
+	}, function (err) {
+		return Promise.resolve(cb()),then(fucntion (){
+			throw new Error(err)
+		})
+	})
+}
+
+
+/**
+ * promise.allSettled
+ */
+
+function allSettled(promises) {
+	if(promises.length === 0) return new Promise.resolve([])
+
+	const _promises = promise.map(item => item instanceof Promise ? item : Promise.resolve(item))
+
+	return new Promise((resolve, reject) => {
+		const result = []
+		let unSettledPromiseCount = _promises.length
+
+		_promises.forEach((promise, index) => {
+			promise.then((value)=>{
+				result[index]  = {
+					status: 'fulfilled',
+					value
+				}
+
+				unSettledPromiseCount -= 1
+				// resolve after all are settled
+				if(unSettledPromiseCount === 0) {
+					resolve(result)
+				}
+
+			}, (reason) => {
+				result[index] = {
+					status: 'rejected',
+					reason
+				}
+
+				unSettledPromiseCount -= 1
+				if(unSettledPromiseCount === 0) {
+					resolve(result)
+				}
+			})
+		})
+	})
+
+}
+
+
+/**
+ * Promise.race
+ */
+Promise.race = function(promiseArr) {
+	return new Promise((resolve, reject) => {
+		promiseArr.forEach(p => {
+			Promise.resolve(p).then(val => {
+				resolve(val)
+			}, err => {
+				reject(err)
+			})
+		})
+	})
+}
+
+
+/**
+ * Promise.any
+ */
+
+Promise.any = function(promiseArr) {
+	let index = 0
+	return new Promise((resolve, reject) => {
+		const plen = promiseArr.length
+		if(plen === 0) return
+
+		promiseArr.forEach((p, i) => {
+			Promise.resolve(p).then(val => resolve(val), err=> {
+				index++
+				if(index === plen) {
+					reject(new AggregateError('all promise were rejected'))
+				}
+			})
+		})
+	})
+}
+
+
+/**
+ * resolve
+ */
+Promise.resolve = function(value) {
+    if(value instanceof Promise){
+        return value
+    }
+    return new Promise(resolve => resolve(value))
+}
+
+
+/**
+ * reject
+ */
+
+Promise.reject = function(reason) {
+    return new Promise((resolve, reject) => reject(reason))
+}
+
+
+/**
+ * promise.all
+ */
+Promise.myAll = function(arr) {
+	return new Promise((resolve, reject) => {
+		const len = arr.length
+		if(len === 0) {
+				return resolve([])
+		} else {
+			let res = []
+			let count = 0
+			for(let i = 0;i < len;i++) {
+				// 同时也能处理arr数组中非promise对象
+				if(!(arr[i] instanceof Promise)) {
+					res[i] = arr[i]
+					if(++count === len) resolve(res)
+				} else {
+					arr[i].then(data => {
+						res[i] = data
+						if(++count ===len) resolve(res)
+					},err => resject(err))
+				}
+			}
+		}
+	})
+}
+
+/**
+ * promise.race
+ */
+Promise.myRace = function(arr) {
+	return new Promise((resolve, reject) => {
+		const len = arr.length
+		for(let i=0;i<len;i++) {
+			if(!(arr[i] instanceof Promise)) {
+				Promise.resolve(arr[i]).then(resolve,reject)
+			} else {
+				arr[i].then(resolve, reject)
+			}
+		}
+	})
+}
+
+// // 测试用例
+// let p1 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(11)
+//     }, 2000);
+// });
+// let p2 = new Promise((resolve, reject) => {
+//     reject('asfs')
+
+// });
+// let p3 = new Promise((resolve) => {
+//     setTimeout(() => {
+//         resolve(33);
+//     }, 4);
+// });
+
+// Promise.myall([p3, p1, 3, 4]).then(data => {
+//     // 按传入数组的顺序打印
+//     console.log(data); // [3, 1, 2]
+// }, err => {
+//     console.log(err)
+// });
+
+// Promise.myrace([p1, p2, p3]).then(data => {
+//     // 谁快就是谁
+//     console.log(data); // 2
+// }, err => {
+//     console.log('失败跑的最快')
+// })
+
+
+
+
+
+
+
