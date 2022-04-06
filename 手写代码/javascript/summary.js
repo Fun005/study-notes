@@ -101,7 +101,7 @@ function _new() {
 	obj.__proto__ = constructor.prototype
 	let result = constructor.apply(obj, args)
 	if(result && typeof result === 'function' || typeof result === 'object') {
-		return result
+		return result;
 	}
 	return obj;
 }
