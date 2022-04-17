@@ -1,7 +1,7 @@
 /**
  * myPromise
  * 文章地址1：https://juejin.cn/post/7043758954496655397 （此处实现参考这篇文章）
- * 文字地址2：https://juejin.cn/post/6876686095954903048  (Promise.then回调的执行顺序)
+ * 文章地址2：https://juejin.cn/post/6876686095954903048  (Promise.then回调的执行顺序)
  */
 
 class myPromise {
