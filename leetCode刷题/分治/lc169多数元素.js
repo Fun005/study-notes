@@ -1,5 +1,6 @@
 /**
- * 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+ * 给定一个大小为 n 的数组 nums ，返回其中的多数元素。
+ * 多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
  * 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
  *
  * n == nums.length
@@ -10,12 +11,13 @@
 /**
  * 分治法
  * 不断从数组的中间进行递归分割，直到每个区间的个数是1，然后向上合并左右区间个数较多的数，向上返回。
- * 时间复杂度：O(nlogn)，不断二分，复杂度是logn，二分之后每个区间需要线性统计left与right的个数，复杂度是n。空间复杂度：O(logn)，递归栈的消耗，不断二分。
-作者：zz1998
+ * 时间复杂度：O(nlogn)，不断二分，复杂度是logn，二分之后每个区间需要线性统计left与right的个数，复杂度是n。
+ * 空间复杂度：O(logn)，递归栈的消耗，不断二分。
+
  * @param {number[]} nums
  * @return {number}
  */
-var majorityElement = function (nums) {
+function majorityElement (nums) {
     const getCount = (num, lo, hi) => {
     	// 统计lo到hi之间num的数量
     	let count = 0
@@ -51,7 +53,7 @@ var majorityElement = function (nums) {
  * 方法1.排序法
  * 排序数组，如果有一个数字出现的频率大于n/2，则在数组nums.length / 2的位置就是这个数
  */
-var majorityElement1 = function (nums) {
+function majorityElement1(nums) {
     nums.sort((a, b) => a - b);
     return nums[Math.floor(nums.length / 2)];
 };
@@ -60,7 +62,7 @@ var majorityElement1 = function (nums) {
  * 方法2.哈希表
  * 循环数组，用哈希表存储数字和对应的个数，如果数字出现的个数大于n/2则返回这个数
  */
-var majorityElement2 = function (nums) {
+function majorityElement2(nums) {
     let half = nums.length / 2;
     let obj = {};
     for (let num of nums) {
@@ -72,7 +74,7 @@ var majorityElement2 = function (nums) {
 /**
  * 方法3 map,计数
  */
-var majorityElement3 = function(nums) {
+function majorityElement3(nums) {
     const len = nums.length
     if(len==1) return nums[0]
     const map = new Map()

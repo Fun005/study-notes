@@ -59,3 +59,4 @@ var equalSubstring2 = function(s, t, maxCost) {
     }
     return maxLength;
 };
+
