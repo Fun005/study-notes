@@ -20,7 +20,6 @@
 // s 和 wordDict[i] 仅有小写英文字母组成
 // wordDict 中的所有字符串 互不相同
 
-
 // DFS、BFS、动态规划
 
 /**
@@ -34,12 +33,12 @@ function wordBreak(s, wordDict) {
 	const memo = new Array(len)
 
 	const canBreak = start => {
-		if(start === len) return true
-		if(memo[start] !== undefined) return memo[start] // 使用缓存
+		if (start === len) return true
+		if (memo[start] !== undefined) return memo[start] // 使用缓存
 
-		for(let i = start + 1;i <=len;i++) {
+		for (let i = start + 1; i <= len; i++) {
 			const prefix = s.slice(start, i)
-			if(wordSet.has(prefix) && canBreak(i)) {
+			if (wordSet.has(prefix) && canBreak(i)) {
 				memo[start] = true // 当前递归的结果缓存起来
 				return true
 			}

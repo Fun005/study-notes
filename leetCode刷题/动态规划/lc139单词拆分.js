@@ -35,10 +35,10 @@ function wordBreak(s, wordDict) {
 
 	dp[0] = true
 
-	for(let i = 1; i <= len; i++) {
-		for(let j = i -1;j >= 0; j--) {
+	for (let i = 1; i <= len; i++) {
+		for (let j = i - 1; j >= 0; j--) {
 			const suffix = s.slice(j, i)
-			if(wordSet.has(suffix) && dp[j]) {
+			if (wordSet.has(suffix) && dp[j]) {
 				dp[i] = true
 				break;
 			}

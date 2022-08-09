@@ -1,3 +1,5 @@
+
+// leetcode 33. 搜索旋转排序数组 medium
 // 整数数组 nums 按升序排列，数组中的值 互不相同 。
 
 // 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，
@@ -9,6 +11,26 @@
 
 // 你必须设计一个时间复杂度为 O(log n) 的算法解决此问题。
 
+// 示例 1：
+// 输入：nums = [4,5,6,7,0,1,2], target = 0
+// 输出：4
+
+// 示例 2：
+// 输入：nums = [4,5,6,7,0,1,2], target = 3
+// 输出：-1
+
+// 示例 3：
+// 输入：nums = [1], target = 0
+// 输出：-1
+
+
+// 提示：
+// 1 <= nums.length <= 5000
+// -104 <= nums[i] <= 104
+// nums 中的每个值都 独一无二
+// 题目数据保证 nums 在预先未知的某个下标上进行了旋转
+// -104 <= target <= 104
+
 /**
  * @param {number[]} nums
  * @param {number} target
@@ -16,28 +38,28 @@
  */
 function search(nums, target) {
 	const len = nums.length
-	if(len === 0) return -1
+	if (len === 0) return -1
 
 	let left = 0, right = len - 1
-	while(left <= right) {
+	while (left <= right) {
 		//  >>1 相当于除以2向下取整
 		let mid = (left + right) >> 1
 
-		if(nums[mid] === target) return mid
+		if (nums[mid] === target) return mid
 
 		// 如果中间数小于最右边数，则右半段是有序的
-    // 如果中间数大于最右边数，则左半段是有序的
-		if(nums[mid] < nums[right]) {
+		// 如果中间数大于最右边数，则左半段是有序的
+		if (nums[mid] < nums[right]) {
 			// 判断target是否在(mid, end]之间
-			if(target > nums[mid] && target <= nums[right]) {
+			if (target > nums[mid] && target <= nums[right]) {
 				// 如果在，则中间数右移即left增大
-        left = mid + 1;
+				left = mid + 1;
 			} else {
 				// 如果不在，则中间数左移即right减小
-        right = mid - 1;
+				right = mid - 1;
 			}
 		} else {
-			if(target < nums[mid] && target >= nums[left]) {
+			if (target < nums[mid] && target >= nums[left]) {
 				right = mid - 1
 			} else {
 				left = mid + 1
