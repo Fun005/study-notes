@@ -10,15 +10,15 @@
  */
 
 function searchMatrix(matrix, target) {
-	if(matrix.length === 0 || matrix[0].length === 0) return false
+	if (matrix.length === 0 || matrix[0].length === 0) return false
 
 	// 从左下开始
 	let len = matrix.length - 1
 	let i = 0
-	while(i >= 0 && i < matrix[0].length) {
-		if(matrix[len][i] > target) {
+	while (i >= 0 && i < matrix[0].length) {
+		if (matrix[len][i] > target) {
 			len--
-		} else if(matrix[len][i] < target) {
+		} else if (matrix[len][i] < target) {
 			i++
 		} else {
 			return true

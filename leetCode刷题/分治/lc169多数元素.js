@@ -17,35 +17,35 @@
  * @param {number[]} nums
  * @return {number}
  */
-function majorityElement (nums) {
-    const getCount = (num, lo, hi) => {
-    	// 统计lo到hi之间num的数量
-    	let count = 0
+function majorityElement(nums) {
+	const getCount = (num, lo, hi) => {
+		// 统计lo到hi之间num的数量
+		let count = 0
 
-    	for(let i = lo; i <= hi; i++) {
-    		if(nums[i] === num) count++
-    	}
+		for (let i = lo; i <= hi; i++) {
+			if (nums[i] === num) count++
+		}
 
-     	return count;
-    }
+		return count;
+	}
 
-    const getMode = (lo, hi) => {
-    	if(lo == hi) return nums[lo]
+	const getMode = (lo, hi) => {
+		if (lo == hi) return nums[lo]
 
-    	// 拆分成更小的区间
-    	let mid = Math.floor((lo + hi)/2)
-    	let left = getMode(lo, mid)
-    	let right = getMode(mid+1, hi)
+		// 拆分成更小的区间
+		let mid = Math.floor((lo + hi) / 2)
+		let left = getMode(lo, mid)
+		let right = getMode(mid + 1, hi)
 
-    	if(left == right) return left
+		if (left == right) return left
 
-    	let leftCount = getCount(left, lo, hi) // 统计区间内left的个数
-    	let rightCount = getCount(right, lo, hi) // 统计区间内left的个数
+		let leftCount = getCount(left, lo, hi) // 统计区间内left的个数
+		let rightCount = getCount(right, lo, hi) // 统计区间内left的个数
 
-    	return leftCount > rightCount ? left : right //返回left和right中个数多的那个
-    }
+		return leftCount > rightCount ? left : right //返回left和right中个数多的那个
+	}
 
-    return getMode(0, nums.length - 1)
+	return getMode(0, nums.length - 1)
 };
 
 
@@ -54,8 +54,8 @@ function majorityElement (nums) {
  * 排序数组，如果有一个数字出现的频率大于n/2，则在数组nums.length / 2的位置就是这个数
  */
 function majorityElement1(nums) {
-    nums.sort((a, b) => a - b);
-    return nums[Math.floor(nums.length / 2)];
+	nums.sort((a, b) => a - b);
+	return nums[Math.floor(nums.length / 2)];
 };
 
 /**
@@ -63,31 +63,31 @@ function majorityElement1(nums) {
  * 循环数组，用哈希表存储数字和对应的个数，如果数字出现的个数大于n/2则返回这个数
  */
 function majorityElement2(nums) {
-    let half = nums.length / 2;
-    let obj = {};
-    for (let num of nums) {
-        obj[num] = (obj[num] || 0) + 1;
-        if (obj[num] > half) return num;
-    }
+	let half = nums.length / 2;
+	let obj = {};
+	for (let num of nums) {
+		obj[num] = (obj[num] || 0) + 1;
+		if (obj[num] > half) return num;
+	}
 };
 
 /**
  * 方法3 map,计数
  */
 function majorityElement3(nums) {
-    const len = nums.length
-    if(len==1) return nums[0]
-    const map = new Map()
-    for(let i = 0;i < len; i++) {
-		if(map.get(nums[i])) {
+	const len = nums.length
+	if (len == 1) return nums[0]
+	const map = new Map()
+	for (let i = 0; i < len; i++) {
+		if (map.get(nums[i])) {
 			let times = map.get(nums[i])
 			times++
-			if(times > len/2) {
+			if (times > len / 2) {
 				return nums[i]
 			}
-            map.set(nums[i],times)
+			map.set(nums[i], times)
 		} else {
-			map.set(nums[i],1)
+			map.set(nums[i], 1)
 		}
 	}
 };
