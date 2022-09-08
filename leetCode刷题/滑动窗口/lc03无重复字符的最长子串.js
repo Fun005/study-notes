@@ -5,15 +5,15 @@
  * @return {number}
  */
 function lengthOfLongestSubstring(s) {
-	if(s === '') return 0
+	if (s === '') return 0
 
 	const len = s.length
 	const set = new Set()
 	let i = 0, j = 0, maxLength = 0
 
-	for(i; i < len; i++) {
-		if(set.has(s[i])) {
-			while(set.has(s[i])) {
+	for (i; i < len; i++) {
+		if (set.has(s[i])) {
+			while (set.has(s[i])) {
 				set.delete(s[j])
 				j++
 			}

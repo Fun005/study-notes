@@ -4,21 +4,21 @@
 // 并返回其长度。如果不存在符合条件的子数组，返回 0 。
 
 
-var minSubArrayLen = function(target, nums) {
+function minSubArrayLen(target, nums) {
 	const len = nums.length
-	if(len == 0) return 0
+	if (len == 0) return 0
 
 	let i = 0, j = 0, sum = 0
 	let minLen = Infinity
 
-	while(j < len) {
-		sum += nums[j]
-		while(sum >= target) {
-			minLen = Math.min(minLen, j - i +1)
-			sum -= sum[i]
-			i++
+	while (i < len) {
+		sum += nums[i]
+		while (sum >= target) {
+			minLen = Math.min(minLen, i - j + 1)
+			sum -= sum[j]
+			j++
 		}
-		j++
+		i++
 	}
 
 	return minLen == Infinity ? 0 : minLen

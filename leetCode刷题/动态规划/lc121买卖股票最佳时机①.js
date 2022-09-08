@@ -41,3 +41,18 @@ function maxProfit(prices) {
 
     return maxProfit
 };
+
+
+function maxProfit2(prices) {
+    const len = prices.length
+    if (len < 1) return 0
+
+    let maxProfit = 0
+    let minCost = prices[0]
+    for (let i = 1; i <= len; i++) {
+        minCost = Math.min(minCost, prices[i])
+        maxProfit = Math.max(prices[i] - minCost, maxProfit)
+    }
+
+    return maxProfit
+}

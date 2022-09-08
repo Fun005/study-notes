@@ -6,14 +6,14 @@
  */
 
 function TreeNode(val, left, right) {
-    this.val = (val===undefined ? 0 : val)
-    this.left = (left===undefined ? null : left)
-    this.right = (right===undefined ? null : right)
+    this.val = (val === undefined ? 0 : val)
+    this.left = (left === undefined ? null : left)
+    this.right = (right === undefined ? null : right)
 }
 
-var hasPathSum = function(root, targetSum) {
-	if(root == null) return false
-	if(root.left == null && root.right == null) return targetSum == root.val
+function hasPathSum(root, targetSum) {
+    if (root == null) return false
+    if (root.left == null && root.right == null) return targetSum == root.val
 
-	return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
+    return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
 };
