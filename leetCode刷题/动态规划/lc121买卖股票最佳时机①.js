@@ -49,7 +49,7 @@ function maxProfit2(prices) {
 
     let maxProfit = 0
     let minCost = prices[0]
-    for (let i = 1; i <= len; i++) {
+    for (let i = 1; i < len; i++) {
         minCost = Math.min(minCost, prices[i])
         maxProfit = Math.max(prices[i] - minCost, maxProfit)
     }
