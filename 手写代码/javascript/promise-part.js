@@ -13,7 +13,7 @@ function PromiseAll(promises) {
 		let count = 0
 		const proLen = promises.length
 
-		promise.forEach((promise, index) => {
+		promises.forEach((promise, index) => {
 			promise.then(res => {
 				result[index] = res
 				count++
@@ -218,6 +218,40 @@ Promise.myRace = function(arr) {
 // })
 
 
+// 任务队列
+// reduce会先遍历整个tasks任务列表
+// 初始一个Promise.resolve()，
+// await promise 等待前面promise结束继续下一个promise的生成，
+// 每个promise里面生成的上下文都会对应一个task
+let task: Task = (): Promise<any> => {
+  return new Promise((resolve) => {
+  })
+}
+runTask(tasks: Task[]) {
+  return tasks.reduce(async function(promise, task){
+    await promise
+    return new Promise(function (resolve) {
+      task().then(() => {
+        setTimeout(resolve, Config.requestTime) // 控制到请求之间的间隔时间
+      })
+    })
+  },Promise.resolve())
+}
+
+// 另一个变相写法
+function myQuequ(things){
+    var promise = Promise.resolve();
+    things.forEach((things)=>{
+        promise = promise.then(()=>{
+            return new Promise((resolve)=>{
+                dosomething(thing,()=>{
+                    resolve();
+                })
+            })
+        })
+    })
+    return promise;
+}
 
 
 
