@@ -16,12 +16,12 @@ module.exports = {
     sourceType: 'module'
   },
   extends: [
-    'prettier', 
+    'prettier',
     'prettier/react'
   ],
   plugins: [
-    'promise', 
-    'react', 
+    'promise',
+    'react',
     'react-hooks'
   ],
   env: {
