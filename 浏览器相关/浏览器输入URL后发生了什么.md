@@ -16,9 +16,9 @@
 * 物理媒介类型
 * 运营商路线
 
-如果请求的是静态资源，那么流量有可能到达 CDN 服务器；如果请求的是动态资源，那么情况更加复杂，流量可能依次经过代理/网关、Web 
-服务器、应用服务器、数据库。图 1 为阿里云 SLB（Server Load 
-Balancer，负载均衡）高可用部署示意图，它不同于传统的主备切换模式过于依赖单机处理能力，来自公网的请求通过上层交换机的 
+如果请求的是静态资源，那么流量有可能到达 CDN 服务器；如果请求的是动态资源，那么情况更加复杂，流量可能依次经过代理/网关、Web
+服务器、应用服务器、数据库。图 1 为阿里云 SLB（Server Load
+Balancer，负载均衡）高可用部署示意图，它不同于传统的主备切换模式过于依赖单机处理能力，来自公网的请求通过上层交换机的
 ECMP（Equal-cost multi-path routing，等价多路径路由）将流量转发给 LVS 集群（四层 SLB），对于 TCP/UDP 请求，LVS 集群直接转发给后端 ECS 集群，对于 HTTP 请求，则转发给 Tengine 集群（七层 SLB），由 Tengine 集群再转发给后端 ECS 集群，集群之间通过实现会话同步、健康检查等机制来保证高可用。
 
 ![图 1：阿里云负载均衡服务](https://pic1.zhimg.com/80/v2-e2050d15f42336e205122dd51a803230_hd.jpg)
@@ -87,7 +87,7 @@ ECMP（Equal-cost multi-path routing，等价多路径路由）将流量转发�
 2. 服务器通过调用 close 函数主动关闭连接，向客户端发送带有 FIN 标志位的分组，序列号为 m。
 3. 客户端确认收到该分组，向服务器发送带有 ACK 标志位的分组，确认号为 m+1。
 4. 客户端发送完所有数据后，向服务器发送带有 FIN 标志位的分组，序列号为 n。
-5. 服务器确认收到该分组，向客户端发送带有 ACK 标志位的分组，序列号为 n+1。客户端收到确认分组后，立即进入 CLOSED 状态；同时，服务器等待 2 个 MSL(Maximum Segment Lifetime，最大报文生存时间) 的时间后，进入 CLOSED 
+5. 服务器确认收到该分组，向客户端发送带有 ACK 标志位的分组，序列号为 n+1。客户端收到确认分组后，立即进入 CLOSED 状态；同时，服务器等待 2 个 MSL(Maximum Segment Lifetime，最大报文生存时间) 的时间后，进入 CLOSED
    状态。
 
 **浏览器解析过程**
@@ -122,14 +122,14 @@ Chromium 支持多种不同的方式管理 Renderer 进程，不仅仅是每一�
 * Process-per-tab：每个 Tab 页面开启一个进程
 * Single process：所有页面共享一个进程
 
-当 Renderer 进程需要访问网络请求模块（XHR、Fetch），以及访问存储系统（同步 Local Storage、同步 Cookie、异步 Cookie Store）时，则调用 RenderProcess 全局对象通过 IO 线程与 Browser 进程中的 
+当 Renderer 进程需要访问网络请求模块（XHR、Fetch），以及访问存储系统（同步 Local Storage、同步 Cookie、异步 Cookie Store）时，则调用 RenderProcess 全局对象通过 IO 线程与 Browser 进程中的
 RenderProcessHost 对象建立 IPC 信道，底层通过 socketpair 来实现。正由于这种机制，Chromium 可以更好地统一管理资源、调度资源，有效地减少网络、性能开销。
 
 **主流程**
 
 页面的解析工作是在 Renderer 进程中进行的，Renderer 进程通过在主线程中持有的 Blink 实例边接收边解析 HTML 内容（图
-6），每次从网络缓冲区中读取 8KB 以内的数据。浏览器自上而下逐行解析 HTML 内容，经过词法分析、语法分析，构建 DOM 树。当遇到外部CSS 链接时，主线程调用网络请求模块异步获取资源，不阻塞而继续构建 DOM 树。当 CSS 下载完毕后，主线程在合适的时机解析 CSS 内容，经过词法分析、语法分析，构建 CSSOM 树。浏览器结合 DOM 树和 CSSOM 树构建 Render 树，并计算布局属性，每个 
-Node 的几何属性和在坐标系中的位置，最后进行绘制展示在屏幕上。当遇到外部 JS 链接时，主线程调用网络请求模块异步获取资源，由于 JS 可能会修改 DOM 树和 CSSOM 树而造成回流和重绘，此时 DOM 
+6），每次从网络缓冲区中读取 8KB 以内的数据。浏览器自上而下逐行解析 HTML 内容，经过词法分析、语法分析，构建 DOM 树。当遇到外部CSS 链接时，主线程调用网络请求模块异步获取资源，不阻塞而继续构建 DOM 树。当 CSS 下载完毕后，主线程在合适的时机解析 CSS 内容，经过词法分析、语法分析，构建 CSSOM 树。浏览器结合 DOM 树和 CSSOM 树构建 Render 树，并计算布局属性，每个
+Node 的几何属性和在坐标系中的位置，最后进行绘制展示在屏幕上。当遇到外部 JS 链接时，主线程调用网络请求模块异步获取资源，由于 JS 可能会修改 DOM 树和 CSSOM 树而造成回流和重绘，此时 DOM
 树的构建是处于阻塞状态的。但主线程并不会挂起，浏览器会使用一个轻量级的扫描器去发现后续需要下载的外部资源，提前发起网络请求，而脚本内部的资源不会识别，比如
 `document.write`。当 JS 下载完毕后，浏览器调用 V8 引擎在 Script Streamer 线程中解析、编译 JS 内容，并在主线程中执行（图 7）。
 
@@ -139,13 +139,13 @@ Node 的几何属性和在坐标系中的位置，最后进行绘制展示在屏
 
 **渲染流程**
 
-当 DOM 树构建完毕后，还需经过好几次转换，它们有多种中间表示（图 8）。首先计算布局、绘图样式，转换为 RenderObject 树（也叫 
+当 DOM 树构建完毕后，还需经过好几次转换，它们有多种中间表示（图 8）。首先计算布局、绘图样式，转换为 RenderObject 树（也叫
 Render 树）。再转换为 RenderLayer 树，当 RenderObject 拥有同一个坐标系（比如 canvas、absolute）时，它们会合并为一个 RenderLayer，这一步由 CPU 负责合成。接着转换为 GraphicsLayer
 树，当 RenderLayer 满足合成层条件（比如 transform，熟知的硬件加速）时，会有自己的 GraphicsLayer，否则与父节点合并，这一步同样由 CPU 负责合成。最后，每个 GraphicsLayer 都有一个GraphicsContext 对象，负责将层绘制成位图作为纹理上传给 GPU，由 GPU 负责合成多个纹理，最终显示在屏幕上。
 
 ![图 8：从 DOM 树到 GraphicsLayer 树的转换](https://pic4.zhimg.com/80/v2-892f27417777b22578ec84e8cbc8c997_hd.jpg)
 
-另外，为了提升渲染性能效率，浏览器会有专用的 Compositor 线程来负责层合成（图 9），同时负责处理部分交互事件（比如滚动、触摸），直接响应 UI 更新而不阻塞主线程。主线程把 RenderLayer 树同步给 Compositor 线程，由它开启多个 Rasterizer 线程，进行光栅化处理，在可视区域以瓦片为单位把顶点数据转换为片元，最后交付给 
+另外，为了提升渲染性能效率，浏览器会有专用的 Compositor 线程来负责层合成（图 9），同时负责处理部分交互事件（比如滚动、触摸），直接响应 UI 更新而不阻塞主线程。主线程把 RenderLayer 树同步给 Compositor 线程，由它开启多个 Rasterizer 线程，进行光栅化处理，在可视区域以瓦片为单位把顶点数据转换为片元，最后交付给
 GPU 进行最终合成渲染。
 
 ![图 9：Chromium 多线程渲染](https://pic3.zhimg.com/80/v2-9a1786b414dbeaa28536ee94612bbafa_hd.jpg)
@@ -172,27 +172,27 @@ GPU 进行最终合成渲染。
 
 **参考文献**
 
-- [UNIX网络编程 卷1：套接口API](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/1500149/)
-- [UNIX网络编程 卷2：进程间通信](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/4859464/)
-- [HTTP权威指南](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/10746113/)
-- [HTTPS权威指南](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/26869219/)
-- [WebKit技术内幕](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/25910556/)
-- [TCP/IP详解 卷1：协议](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/1088054/)
-- [负载均衡基础架构](http://link.zhihu.com/?target=https%3A//help.aliyun.com/document_detail/27544.html%3Fspm%3Da2c4g.11186623.6.544.76cb6327dySyFu)
-- [负载均衡SLB高可用的四个层次](http://link.zhihu.com/?target=https%3A//yq.aliyun.com/articles/191149)
-- [数据库异地多活解决方案](http://link.zhihu.com/?target=https%3A//help.aliyun.com/document_detail/72721.html)
-- [Dissecting TLS Using Wireshark](http://link.zhihu.com/?target=http%3A//blog.catchpoint.com/2017/05/12/dissecting-tls-using-wireshark/)
-- [How Browsers Work](http://link.zhihu.com/?target=https%3A//www.html5rocks.com/en/tutorials/internals/howbrowserswork/)
-- [Multi-process Architecture](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/multi-process-architecture)
-- [How Blink works](http://link.zhihu.com/?target=https%3A//docs.google.com/document/d/1aitSOucL0VHZa9Z2vbRJSyAIsAz24kX8LFByQ5xQnUg)
-- [Life of a Pixel 2018](http://link.zhihu.com/?target=https%3A//docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit%23slide%3Did.g25ae9c179b_0_46)
-- [Multi-process Resource Loading](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/multi-process-resource-loading)
-- [Process Models](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/process-models)
-- [How Chromium Displays Web Pages](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/displaying-a-web-page-in-chrome)
-- [Threading and Tasks in Chrome](http://link.zhihu.com/?target=https%3A//chromium.googlesource.com/chromium/src/%2B/master/docs/threading_and_tasks.md%23Posting-to-a-New-Sequence)
-- [V8 Background Compilation](http://link.zhihu.com/?target=https%3A//v8project.blogspot.com/2018/03/background-compilation.html)
-- [JavaScript engine fundamentals](http://link.zhihu.com/?target=https%3A//mathiasbynens.be/notes/shapes-ics)
-- [Compositor Thread Architecture](http://link.zhihu.com/?target=https%3A//dev.chromium.org/developers/design-documents/compositor-thread-architecture)
-- [GPU Accelerated Compositing in Chrome](http://link.zhihu.com/?target=http%3A//www.chromium.org/developers/design-documents/gpu-accelerated-compositing-in-chrome)
-- [Page Lifecycle API](http://link.zhihu.com/?target=https%3A//developers.google.com/web/updates/2018/07/page-lifecycle-api)
-- [Web Fundamentals](http://link.zhihu.com/?target=https%3A//developers.google.com/web/fundamentals/)
+* [UNIX网络编程 卷1：套接口API](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/1500149/)
+* [UNIX网络编程 卷2：进程间通信](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/4859464/)
+* [HTTP权威指南](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/10746113/)
+* [HTTPS权威指南](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/26869219/)
+* [WebKit技术内幕](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/25910556/)
+* [TCP/IP详解 卷1：协议](http://link.zhihu.com/?target=https%3A//book.douban.com/subject/1088054/)
+* [负载均衡基础架构](http://link.zhihu.com/?target=https%3A//help.aliyun.com/document_detail/27544.html%3Fspm%3Da2c4g.11186623.6.544.76cb6327dySyFu)
+* [负载均衡SLB高可用的四个层次](http://link.zhihu.com/?target=https%3A//yq.aliyun.com/articles/191149)
+* [数据库异地多活解决方案](http://link.zhihu.com/?target=https%3A//help.aliyun.com/document_detail/72721.html)
+* [Dissecting TLS Using Wireshark](http://link.zhihu.com/?target=http%3A//blog.catchpoint.com/2017/05/12/dissecting-tls-using-wireshark/)
+* [How Browsers Work](http://link.zhihu.com/?target=https%3A//www.html5rocks.com/en/tutorials/internals/howbrowserswork/)
+* [Multi-process Architecture](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/multi-process-architecture)
+* [How Blink works](http://link.zhihu.com/?target=https%3A//docs.google.com/document/d/1aitSOucL0VHZa9Z2vbRJSyAIsAz24kX8LFByQ5xQnUg)
+* [Life of a Pixel 2018](http://link.zhihu.com/?target=https%3A//docs.google.com/presentation/d/1boPxbgNrTU0ddsc144rcXayGA_WF53k96imRH8Mp34Y/edit%23slide%3Did.g25ae9c179b_0_46)
+* [Multi-process Resource Loading](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/multi-process-resource-loading)
+* [Process Models](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/process-models)
+* [How Chromium Displays Web Pages](http://link.zhihu.com/?target=https%3A//www.chromium.org/developers/design-documents/displaying-a-web-page-in-chrome)
+* [Threading and Tasks in Chrome](http://link.zhihu.com/?target=https%3A//chromium.googlesource.com/chromium/src/%2B/master/docs/threading_and_tasks.md%23Posting-to-a-New-Sequence)
+* [V8 Background Compilation](http://link.zhihu.com/?target=https%3A//v8project.blogspot.com/2018/03/background-compilation.html)
+* [JavaScript engine fundamentals](http://link.zhihu.com/?target=https%3A//mathiasbynens.be/notes/shapes-ics)
+* [Compositor Thread Architecture](http://link.zhihu.com/?target=https%3A//dev.chromium.org/developers/design-documents/compositor-thread-architecture)
+* [GPU Accelerated Compositing in Chrome](http://link.zhihu.com/?target=http%3A//www.chromium.org/developers/design-documents/gpu-accelerated-compositing-in-chrome)
+* [Page Lifecycle API](http://link.zhihu.com/?target=https%3A//developers.google.com/web/updates/2018/07/page-lifecycle-api)
+* [Web Fundamentals](http://link.zhihu.com/?target=https%3A//developers.google.com/web/fundamentals/)

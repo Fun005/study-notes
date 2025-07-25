@@ -2,13 +2,13 @@
  * 手写 Promise 核心代码
  */
 
-class CorePromise {
+class MyPromise {
     static PENDING = 'pending'
     static FULFILLED = 'fulfilled'
     static REJECTED = 'rejected'
 
     constructor(fn) {
-        this.status = CorePromise.PENDING
+        this.status = MyPromise.PENDING
         this.result = null
         this.resolveCallbacks = []
         this.rejectCallbacks = []
@@ -21,41 +21,42 @@ class CorePromise {
     }
 
     resolve(result) {
-        setTimeout(() => {
-            if (this.status === CorePromise.PENDING) {
-                this.status = CorePromise.FULFILLED
+        if (this.status === MyPromise.PENDING) {
+            setTimeout(() => {
+                this.status = MyPromise.FULFILLED
                 this.result = result
                 this.resolveCallbacks.forEach((cb) => cb(result))
-            }
-        })
+
+            })
+        }
     }
 
     reject(result) {
-        setTimeout(() => {
-            if (this.status === CorePromise.PENDING) {
-                this.status = CorePromise.REJECTED
+        if (this.status === MyPromise.PENDING) {
+            setTimeout(() => {
+                this.status = MyPromise.REJECTED
                 this.result = result
                 this.rejectCallbacks.forEach((cb) => cb(result))
-            }
-        })
+            })
+        }
     }
 
     then(onFullfilled, onRejected) {
-        return new CorePromise((resolve, reject) => {
+        return new MyPromise((resolve, reject) => {
             onFullfilled =
                 typeof onFullfilled === 'function' ? onFullfilled : () => { }
             onRejected = typeof onRejected === 'function' ? onRejected : () => { }
 
-            if (this.status === CorePromise.PENDING) {
+            if (this.status === MyPromise.PENDING) {
                 this.resolveCallbacks.push(onFullfilled)
                 this.rejectCallbacks.push(onRejected)
             }
-            if (this.status === CorePromise.FULFILLED) {
+            if (this.status === MyPromise.FULFILLED) {
                 setTimeout(() => {
                     onFullfilled(this.result)
                     // resolve(onFullfilled(this.result))
                 })
-            } else if (this.status === CorePromise.REJECTED) {
+            } else if (this.status === MyPromise.REJECTED) {
                 setTimeout(() => {
                     onRejected(this.result)
                     // reject(onRejected(this.result))
@@ -66,7 +67,7 @@ class CorePromise {
 }
 
 console.log('第一步')
-let myPromise = new CorePromise((resolve, reject) => {
+let myPromise = new MyPromise((resolve, reject) => {
     console.log('第二步')
     setTimeout(() => {
         resolve('大成功   🎉')
