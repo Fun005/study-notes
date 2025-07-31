@@ -8,9 +8,9 @@
 // 暴力版： 定时器期间，有新操作时，清空旧定时器，重设新定时器
 export const debounce_1 = (fn, delay) => {
 	let timer = null;
-	return function(){
+	return function () {
 		// 如果 timer 存在则表示当前还在周期内，需要清空旧的定时器创建新的定时器
-		if(timer) clearTimeout(timer);
+		if (timer) clearTimeout(timer);
 		// 创建定时器，用于在周期结束后执行函数逻辑
 		timer = setTimeout(() => {
 			fn.apply(this, arguments);
@@ -23,23 +23,23 @@ export const debounce_1 = (fn, delay) => {
 
 export const debounce_2 = (fn, wait, immediate) => {
 	let timeout, result;
-	const debounce = function() {
+	const debounce = function () {
 		const context = this
 		const args = arguments
 
-		if(timeout) clearTimeout(timeout)
-		if(immediate) {
+		if (timeout) clearTimeout(timeout)
+		if (immediate) {
 			// 如果已经执行，不再执行
 			let callNow = !timeout
 			timeout = setTimeout(() => timeout = null, wait)
-			if(callNow) result = fn.apply(context, args)
+			if (callNow) result = fn.apply(context, args)
 		} else {
 			timeout = setTimeout(() => result = fn.apply(context, args), wait)
 		}
 		return result
 	}
 
-	debounce.cancel = function() {
+	debounce.cancel = function () {
 		clearTimeout(timeout)
 		timeout = null
 	}
@@ -57,12 +57,12 @@ export const debounce_2 = (fn, wait, immediate) => {
 export const thorttle_1 = (fn, delay) => {
 	let timer = null;
 	let lock = true;
-	return function(){
-		if(!lock) return
+	return function () {
+		if (!lock) return
 
 		lock = false
 		clearTimeout(timer)
-		timer = setTimeout(function(){
+		timer = setTimeout(function () {
 			fn.apply(this, arguments)
 			lock = true
 		}, delay)
@@ -73,31 +73,31 @@ export const thorttle_1 = (fn, delay) => {
 export const thorttle_2 = (fn, wait, options) => {
 	let timeout, context, args, result;
 	let previous = 0;
-	if(!options) options = {};
+	if (!options) options = {};
 
-	const later = function() {
+	const later = function () {
 		previous = options.leading === false ? 0 : new Date().getTime();
 		timeout = null;
 		fn.apply(context, args);
-		if(!timeout) context = args = null
+		if (!timeout) context = args = null
 	}
 
-	const throttle = function() {
+	const throttle = function () {
 		const now = new Date().getTime();
-		if(!previous && options.leading === false) previous = now;
+		if (!previous && options.leading === false) previous = now;
 		const remain = wait - (now - previous)
 		context = this
 		args = arguments
-		if(remain <= 0 || remain > wait) {
-			if(timeout) {
+		if (remain <= 0 || remain > wait) {
+			if (timeout) {
 				clearTimeout(timeout)
 				timeout = null
 			}
 
 			previous = now;
 			fn.apply(context, args)
-			if(!timeout) context = args = null
-		} else if(!timeout && options.ttrailing !== false) {
+			if (!timeout) context = args = null
+		} else if (!timeout && options.ttrailing !== false) {
 			timeout = setTimeout(later, remain)
 		}
 	}
@@ -125,20 +125,20 @@ export const thorttle_2 = (fn, wait, options) => {
 
 const deepClone = (obj, map = new WeakMap) => {
 	if (obj instanceof RegExp) return new RegExp(obj);
-  if (obj instanceof Date) return new Date(obj);
+	if (obj instanceof Date) return new Date(obj);
 
-  if (obj == null || typeof obj != 'object') return obj;
-  if (map.has(obj)) {
-  	return map.get(obj)
-  }
-  let t = new obj.constructor()
-  map.set(obj,t)
-  for(let key in obj) {
-  	if(obj.hasOwnProperty(key)) {
-  		t[key] = deepClone(obj[key], map)
-  	}
-  }
-  return t;
+	if (obj == null || typeof obj != 'object') return obj;
+	if (map.has(obj)) {
+		return map.get(obj)
+	}
+	let t = new obj.constructor()
+	map.set(obj, t)
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			t[key] = deepClone(obj[key], map)
+		}
+	}
+	return t;
 }
 
 
@@ -172,25 +172,25 @@ const handleRegExp = target => {
 
 const handleFunc = fn => {
 	// 箭头函数直接返回自身
- 	if(!fn.prototype) return fn;
- 	const bodyReg = /(?<={)(.|\n)+(?=})/m;
-  const paramReg = /(?<=\().+(?=\)\s+{)/;
-  const fnString = fn.toString();
-  // 分别匹配 函数参数 和 函数体
-  const param = paramReg.exec(fnString)
-  const body = bodyReg.exec(fnString)
-  if(!body) return null;
-  if(param) {
-  	const paramArr = param[0].split(',');
-  	reutrn new Function(...paramArr, body[0])
-  } else {
-  	return new Function(body[0])
-  }
+	if (!fn.prototype) return fn;
+	const bodyReg = /(?<={)(.|\n)+(?=})/m;
+	const paramReg = /(?<=\().+(?=\)\s+{)/;
+	const fnString = fn.toString();
+	// 分别匹配 函数参数 和 函数体
+	const param = paramReg.exec(fnString)
+	const body = bodyReg.exec(fnString)
+	if (!body) return null;
+	if (param) {
+		const paramArr = param[0].split(',');
+		return new Function(...paramArr, body[0])
+	} else {
+		return new Function(body[0])
+	}
 }
 
 const handleNotTraverse = (target, tag) => {
 	const Ctor = target.constructor;
-	switch(tag) {
+	switch (tag) {
 		case boolTag:
 			return new Object(Boolean.prototype.valueOf.call(target));
 		case numberTag:
@@ -212,11 +212,11 @@ const handleNotTraverse = (target, tag) => {
 }
 
 const deepClone_2 = (target, map = new WeakMap()) => {
-	if(!isObject(target)) return target
+	if (!isObject(target)) return target
 
 	let type = getType(target)
 	let cloneTarget
-	if(!canTraverse[type]) {
+	if (!canTraverse[type]) {
 		// 处理不能遍历的对象
 		return handleNotTraverse(target, type);
 	} else {
@@ -225,24 +225,24 @@ const deepClone_2 = (target, map = new WeakMap()) => {
 		cloneTarget = new ctor();
 	}
 
-	if(map.get(target)) return target;
+	if (map.get(target)) return target;
 	map.set(target, true);
 
-	if(type === mapTag) {
+	if (type === mapTag) {
 		// 处理Map
-		target.forEach((item,key) => {
+		target.forEach((item, key) => {
 			cloneTarget.set(deepClone_2(key, map), deepClone_2(item, map))
 		})
 	}
 
-	if(type === setTag) {
+	if (type === setTag) {
 		// 处理Set
 		target.forEach(item => cloneTarget.add(deepClone_2(item, map)))
 	}
 
 	// 处理数组和对象
-	for(let prop in target) {
-		if(target.hasOwnProperty(prop)) {
+	for (let prop in target) {
+		if (target.hasOwnProperty(prop)) {
 			cloneTarget[prop] = deepClone_2(target[prop], map)
 		}
 	}
@@ -255,8 +255,8 @@ const deepClone_2 = (target, map = new WeakMap()) => {
  * sleep
  */
 const sleep = (fn, time) => {
-	return new Promise((resolve)=>{
-		setTimeout(()=>resolve(fn), time)
+	return new Promise((resolve) => {
+		setTimeout(() => resolve(fn), time)
 		// 或者：setTimeout(resolve, time)
 	})
 }
@@ -272,11 +272,11 @@ const sleep = (fn, time) => {
 /**
  * ajax
  */
-function ajax (method,url) {
+function ajax(method, url) {
 	let request = new XMLHttpRequest();
-	request.open(method,url,true);
+	request.open(method, url, true);
 	request.onreadystatechange = function () {
-		if(request.readyState === 4 && request.status === 200) {
+		if (request.readyState === 4 && request.status === 200) {
 			console.log(request.responseText)
 		}
 	}
@@ -299,7 +299,7 @@ function trim(str) {
  * Object.create
  */
 function objCreate(proto) {
-	function Fn() {};
+	function Fn() { };
 	Fn.prototype = proto;
 	Fn.prototype.constructor = Fn;
 	return new Fn()
@@ -310,25 +310,25 @@ function objCreate(proto) {
 // let cc = Object.create(demo)
 
 function newCreate(proto, propertiesObject) {
-    if (typeof proto !== 'object' && typeof proto !== 'function') {
-        throw TypeError('Object prototype may only be an Object: ' + proto)
-    }
-    function F() { }
-    F.prototype = proto
-    const o = new F()
+	if (typeof proto !== 'object' && typeof proto !== 'function') {
+		throw TypeError('Object prototype may only be an Object: ' + proto)
+	}
+	function F() { }
+	F.prototype = proto
+	const o = new F()
 
-    if (propertiesObject !== undefined) {
-        Object.keys(propertiesObject).forEach(prop => {
-            let desc = propertiesObject[prop]
-            if (typeof desc !== 'object' || desc === null) {
-                throw TypeError('Object prorotype may only be an Object: ' + desc)
-            } else {
-                Object.defineProperty(o, prop, desc)
-            }
-        })
-    }
+	if (propertiesObject !== undefined) {
+		Object.keys(propertiesObject).forEach(prop => {
+			let desc = propertiesObject[prop]
+			if (typeof desc !== 'object' || desc === null) {
+				throw TypeError('Object prorotype may only be an Object: ' + desc)
+			} else {
+				Object.defineProperty(o, prop, desc)
+			}
+		})
+	}
 
-    return o;
+	return o;
 }
 
 
@@ -345,7 +345,7 @@ function createObject(Con) {
 	const ret = Con.apply(obj, [].slice.call(arguments, 1));
 
 	// 若构造函数返回值为对象，直接返回该对象，否则返回obj
-	return typeof(ret) === 'object' ? ret : obj;
+	return typeof (ret) === 'object' ? ret : obj;
 }
 
 
@@ -360,12 +360,12 @@ function limitRunTask(tasks, n) {
 		const taskLen = tasks.length;
 
 		function run() {
-			if(finish === taskLen) {
+			if (finish === taskLen) {
 				resolve(result);
 				return;
 			}
 
-			while(start < n && index < taskLen) {
+			while (start < n && index < taskLen) {
 				// 每阶段的任务数量++
 				start++;
 				let current = index;
@@ -392,7 +392,7 @@ function multipleRequest(urls = [], maxNum) {
 
 	return new Promise((resolve, reject) => {
 		// 最多请求maxNum
-		while(count < maxNum) {
+		while (count < maxNum) {
 			run();
 		}
 
@@ -400,7 +400,7 @@ function multipleRequest(urls = [], maxNum) {
 			let current = count++;
 
 			//处理边界条件
-			if(current >= len) {
+			if (current >= len) {
 				// 请求全部完成就将promise置为成功的状态，然后将result作为promise值返回
 				!result.includes(false) && resolve(result)
 				return;
@@ -413,14 +413,14 @@ function multipleRequest(urls = [], maxNum) {
 				result[current] = res;
 				console.log(`end ${current}, ${new Date().toLocaleString()}`);
 				// 请求没有完成，递归执行
-				if(current < len) {
+				if (current < len) {
 					run();
 				}
 			}).catch(err => {
 				console.time(`end ${current}, ${new Date().toLocaleString()}`);
 				result[current] = err;
 				// 请求没有完成，递归执行
-				if(current < len) {
+				if (current < len) {
 					run();
 				}
 			})
