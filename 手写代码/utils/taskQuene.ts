@@ -90,3 +90,82 @@ async function runTasks() {
 }
 
 runTasks()
+
+// 合并两个有序数组
+// nums1 = [1,2,3,0,0,0,0],num2 = [2,5,6,7],m = 3, n = 4
+// nums1 = [4,5,7,0,0,0,0],num2 = [2,3,7,8],m = 3, n = 4
+function merge2Arr(nums1,nums2,m,n) {
+
+    let i = m - 1
+    let j = n - 1
+    let k = m + n - 1
+
+    while(i >= 0 && j >= 0) {
+        if(nums1[i] > nums2[j]) {
+            nums1[k] = nums1[i]
+            i--
+        } else {
+            nums1[k] = nums2[j]
+            j--
+        }
+        k--
+    }
+
+
+    while(j >= 0) {
+        nums1[j] = nums2[j]
+        j--
+    }
+
+    return nums1
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -30,8 +30,8 @@ function multiply(num1, num2) {
             // 从个位数开始，逐步相乘
             // 若num1[i] x num2[j] 的结果为 temp (位数为两位，"0x","xy"的形式)，则其第一位位于 result[i+j]，第二位位于 result[i+j+1]。
 
-            const v = num1[i] * num2[j]
-            const sum = v + result[i + j + 1]
+            const temp = num1[i] * num2[j]
+            const sum = temp + result[i + j + 1]
 
             result[i + j] += Math.floor(sum / 10)
             result[i + j + 1] = sum % 10
