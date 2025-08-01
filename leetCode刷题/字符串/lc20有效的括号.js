@@ -35,7 +35,7 @@
 // 1 <= s.length <= 104
 // s 仅由括号 '()[]{}' 组成
 
-function isValid(s) {
+function isValid1(s) {
     if (s.length < 2) return false
 
     const map = {
@@ -54,4 +54,23 @@ function isValid(s) {
     }
 
     return stack.length === 0
+}
+
+function isValid2(s) {
+    if (s.length < 2) return false;
+    const stack = [];
+    // 映射右括号到对应的左括号
+    const map = { ')': '(', '}': '{', ']': '[' };
+    for (let char of s) {
+        if (map[char]) {
+            // 遇到右括号：判断栈顶是否匹配
+            const top = stack.pop() || '#'; // 用#避免空栈报错
+            if (top !== map[char]) return false;
+        } else {
+            // 遇到左括号：入栈
+            stack.push(char);
+        }
+    }
+    // 栈为空则所有括号匹配
+    return stack.length === 0;
 }
