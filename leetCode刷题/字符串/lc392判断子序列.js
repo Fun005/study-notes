@@ -30,24 +30,11 @@
  * @param {string} t
  * @return {boolean}
  */
+
+
+// 双指针
+// i 遍历 s, j 遍历 t
 var isSubsequence = function (s, t) {
-    if (s === "") return true
-    // 双指针
-    // i 遍历 s, j 遍历 t
-    let i = 0, j = 0;
-    while (i < s.length && j < t.length) {
-        if (s[i] === t[j] && ++i >= s.length) {
-            return true
-        } else {
-            i++
-            j++
-        }
-    }
-
-    return false
-};
-
-var isSubsequence2 = function (s, t) {
     if (s === "") return true
     for (let i = 0, j = 0; j < t.length; j++) {
         if (s[i] === t[j] && ++i >= s.length) {
