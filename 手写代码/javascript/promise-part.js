@@ -9,17 +9,19 @@ function PromiseAll(promises) {
 			throw new TypeError("promises must be an array")
 		}
 
-		let result = []
-		let count = 0
-		const proLen = promises.length
+		const result = []
+		const total = promises.length
+		let completedCount = 0
+		if (total === 0) return resolve(result)
 
 		promises.forEach((promise, index) => {
+			// 确保每个元素都是Promise（非Promise则包装）
 			promise.then(res => {
-				result[index] = res
-				count++
-				count === proLen && resolve(result)
-			}, err => {
-				reject(err)
+				result[index] = res // 按索引存储，保证顺序
+				completedCount++
+				completedCount === total && resolve(result)
+			}, reason => {
+				reject(reason) // 只要有一个失败就 reject
 			})
 		})
 	})
