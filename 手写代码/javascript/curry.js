@@ -3,16 +3,16 @@
 // 1.判断传递的参数是否达到执行函数的fn个数
 // 2.没有达到的话，继续返回新的函数，并且返回curry函数传递剩余参数
 
-const curryFn = (fn,...args) =>
+const curryFn = (fn, ...args) =>
 	fn.length > args.length ?
-	(...arguments) => curryFn(fn,...args,...arguments) :
-	fn(...args)
+		(...arguments) => curryFn(fn, ...args, ...arguments) :
+		fn(...args)
 
 
 // test
-let addSum = (a,b,c) => a+b+c
+let addSum = (a, b, c) => a + b + c
 let add = curryFn(addSum)
 
 console.log(add(1)(2)(3))
-console.log(add(1,2)(3))
-console.log(add(1,2,3)
+console.log(add(1, 2)(3))
+console.log(add(1, 2, 3))

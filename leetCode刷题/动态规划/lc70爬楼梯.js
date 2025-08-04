@@ -5,9 +5,9 @@
  */
 
 var climbStairs = function (n) {
-	const result = []
-	result[0] = 1
-	result[1] = 1
+
+	const result = [1, 1]
+
 	for (let i = 2; i <= n; i++) {
 		resut[i] = result[i - 1] + result[i - 2]
 	}

@@ -21,21 +21,26 @@
  * @return {string}
  */
 function addStrings(num1, num2) {
-    let len1 = num1.length - 1
-    let len2 = num2.length - 1
-    let add = 0
+    // 指向 num1 的末尾
+    let i = num1.length - 1
+    // 指向 num2 的末尾
+    let j = num2.length - 1
+    // 保存进位
+    let curry = 0
+    // 用数组收集结果位，最后再拼接
     const result = []
 
-    while (len1 >= 0 || len1 >= 0 || add > 0) {
-        const x = len1 >= 0 ? num1.charAt(len1) - '0' : 0
-        const y = len1 >= 0 ? num1.charAt(len2) - '0' : 0
-        const sum = x + y + add
-        result.push(sum % 10)
-        add = Math.floor(sum / 10)
+    // 当 num1、num2 还有数字，或者还有进位时继续循环
+    while (i >= 0 || j >= 0 || curry > 0) {
+        const digit1 = i >= 0 ? parseInt(num1[i]) : 0 // 取出 num1 当前位
+        const digit2 = j >= 0 ? parseInt(num2[j]) : 0 // 取出 num2 当前位
+        const sum = digit1 + digit2 + curry // 当前位相加再加上进位
+        result.push(sum % 10) // 把当前位的数字存入结果
+        curry = Math.floor(sum / 10) // 更新进位
 
-        len1--
-        len2--
+        i--
+        j--
     }
-
+    // 最后把结果数组反转拼接成字符串
     return result.reverse().join('')
 }

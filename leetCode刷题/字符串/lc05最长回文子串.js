@@ -34,7 +34,9 @@ function longestPalindrome(s) {
     }
 
     for (let i = 0; i < slen; i++) {
+        // 回文子串长度是偶数
         helper(i, i + 1)
+        // 回文子串长度是奇数
         helper(i - 1, i + 1)
     }
 

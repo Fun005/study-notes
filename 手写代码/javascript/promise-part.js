@@ -9,17 +9,19 @@ function PromiseAll(promises) {
 			throw new TypeError("promises must be an array")
 		}
 
-		let result = []
-		let count = 0
-		const proLen = promises.length
+		const result = []
+		const total = promises.length
+		let completedCount = 0
+		if (total === 0) return resolve(result)
 
 		promises.forEach((promise, index) => {
+			// 确保每个元素都是Promise（非Promise则包装）
 			promise.then(res => {
-				result[index] = res
-				count++
-				count === proLen && resolve(result)
-			}, err => {
-				reject(err)
+				result[index] = res // 按索引存储，保证顺序
+				completedCount++
+				completedCount === total && resolve(result)
+			}, reason => {
+				reject(reason) // 只要有一个失败就 reject
 			})
 		})
 	})
@@ -230,11 +232,10 @@ Promise.myRace = function (arr) {
 // 初始一个Promise.resolve()，
 // await promise 等待前面promise结束继续下一个promise的生成，
 // 每个promise里面生成的上下文都会对应一个task
-let task: Task = (): Promise<any> => {
-	return new Promise((resolve) => {
-	})
+let task = () => {
+	return new Promise((resolve) => { })
 }
-runTask(tasks: Task[]) {
+function runTask(tasks) {
 	return tasks.reduce(async function (promise, task) {
 		await promise
 		return new Promise(function (resolve) {
@@ -246,9 +247,9 @@ runTask(tasks: Task[]) {
 }
 
 // 另一个变相写法
-function myQuequ(things) {
+function myQueque(things) {
 	var promise = Promise.resolve();
-	things.forEach((things) => {
+	things.forEach((thing) => {
 		promise = promise.then(() => {
 			return new Promise((resolve) => {
 				dosomething(thing, () => {
@@ -259,8 +260,3 @@ function myQuequ(things) {
 	})
 	return promise;
 }
-
-
-
-
-

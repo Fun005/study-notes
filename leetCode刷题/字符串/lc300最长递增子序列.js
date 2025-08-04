@@ -70,3 +70,6 @@ var lengthOfLIS = function (nums) {
         return i;
     }
 };
+
+const arr = [1, 3, 5, 7, 3]
+console.log(lengthOfLIS(arr))
