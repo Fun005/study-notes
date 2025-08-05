@@ -16,6 +16,7 @@ function PromiseAll(promises) {
 
 		promises.forEach((promise, index) => {
 			// 确保每个元素都是Promise（非Promise则包装）
+			// Promise.resolve(promise()).then(res => { }, err => { })
 			promise.then(res => {
 				result[index] = res // 按索引存储，保证顺序
 				completedCount++
